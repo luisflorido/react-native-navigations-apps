@@ -31,7 +31,7 @@ class NavigationApps extends Component {
                             appDeepLinkUriToUse: 'waze://?',
                         }
                     }),
-                    title: 'waze',
+                    title: props.waze.title ? props.waze.title : 'waze',
                     ...Platform.select({
                         ios: {
                             storeUri: 'itms-apps://itunes.apple.com/us/app/id323229106?mt=8',
@@ -58,7 +58,7 @@ class NavigationApps extends Component {
                             appDeepLinkUriToUse: 'https://www.google.com/maps/',
                         }
                     }),
-                    title: 'google maps',
+                    title: props.googleMaps.title ? props.googleMaps.title : 'google maps',
                     ...Platform.select({
                         ios: {
                             storeUri: 'itms-apps://itunes.apple.com/us/app/id585027354?mt=8',
@@ -87,7 +87,7 @@ class NavigationApps extends Component {
                         'maps': {
                             appDeepLinkUri: 'maps://app',
                             appDeepLinkUriToUse: 'maps://app?',
-                            title: 'maps',
+                            title: props.maps.title ? props.maps.title : 'maps',
                             icon: props.maps.icon ? props.maps.icon : require('./assets/mapsIcon.png'),
                             travelModes: {
                                 'car': 'd',
@@ -105,8 +105,8 @@ class NavigationApps extends Component {
 
             },
             modalVisible: false,
-        }
-        this.actionSheetRef
+        };
+        this.actionSheetRef=null;
     }
 
     handleNavApp = (navApp) => {
@@ -125,8 +125,7 @@ class NavigationApps extends Component {
 
             if (!supported) {
                 return Linking.openURL(storeUri);
-            }
-            else {
+            } else {
                 return Linking.openURL(navAppUri);
             }
 
@@ -158,10 +157,10 @@ class NavigationApps extends Component {
         };
         const renderModalBtnOpen = () => {
 
-            const {modalBtnOpenStyle, modalBtnOpenTitle, modalBtnOpenTextStyle,modalBtnOpenDisable} = this.props;
+            const {modalBtnOpenStyle, modalBtnOpenTitle, modalBtnOpenTextStyle, disable} = this.props;
 
             return (
-                <TouchableOpacity style={modalBtnOpenStyle} onPress={() => modalBtnOpenDisable ? null : setModalVisible(true)}>
+                <TouchableOpacity style={modalBtnOpenStyle} onPress={() => disable ? null : setModalVisible(true)}>
                     <Text style={modalBtnOpenTextStyle}>{modalBtnOpenTitle}</Text>
                 </TouchableOpacity>
             )
@@ -194,7 +193,6 @@ class NavigationApps extends Component {
                                 {renderModalBtnClose()}
                             </View>
                         </View>
-
                     </View>
                 </Modal>
             </React.Fragment>
@@ -205,20 +203,23 @@ class NavigationApps extends Component {
 
 
         const renderActionSheetOpenBtn = () => {
-            const {actionSheetBtnOpenStyle, actionSheetBtnOpenTitle, actionSheetBtnOpenTextStyle,actionSheetBtnOpenDisable} = this.props;
+            const {actionSheetBtnOpenStyle, actionSheetBtnOpenTitle, actionSheetBtnOpenTextStyle, disable} = this.props;
             return (
-                <TouchableOpacity style={actionSheetBtnOpenStyle} onPress={()=> actionSheetBtnOpenDisable ? null : this.actionSheetRef.show()}>
+                <TouchableOpacity style={actionSheetBtnOpenStyle} onPress={() => disable ? null : this.actionSheetRef.show()}>
                     <Text style={actionSheetBtnOpenTextStyle}>{actionSheetBtnOpenTitle}</Text>
                 </TouchableOpacity>
             )
 
         };
-        const actionSheetOptions = ()=>{
+        const actionSheetOptions = () => {
+
             const {actionSheetBtnCloseTitle} = this.props;
-            const actionSheetArray = ['waze', 'googleMaps'];
-            if(Platform.OS === 'ios'){
-                actionSheetArray.push('maps')
-            }
+            const actionSheetArray = Object.keys(this.state.navApps).map((navApp, key)=>{
+
+                const navAppItem = this.state.navApps[navApp];
+                return navAppItem.title
+
+            });
             actionSheetArray.push(actionSheetBtnCloseTitle);
             return actionSheetArray
 
@@ -232,11 +233,11 @@ class NavigationApps extends Component {
                     ref={ref => this.actionSheetRef = ref}
                     title={actionSheetTitle}
                     options={actionSheetOptions()}
-                    cancelButtonIndex={actionSheetOptions().length-1}
-                    destructiveButtonIndex={actionSheetOptions().length-1}
+                    cancelButtonIndex={actionSheetOptions().length - 1}
+                    destructiveButtonIndex={actionSheetOptions().length - 1}
                     onPress={(index) => {
 
-                        if(index !== actionSheetOptions().length-1 ){
+                        if (index !== actionSheetOptions().length - 1) {
                             this.handleNavApp(actionSheetOptions()[index])
                         }
 
@@ -264,15 +265,15 @@ class NavigationApps extends Component {
                     this.renderNavigationAppsView()
                 );
             case "modal" :
-                return(
+                return (
                     this.renderNavigationAppsAsModal()
                 );
             case "sheet":
-                return(
+                return (
                     this.renderNavigationAppsAsActionSheet()
                 );
             default:
-                return(
+                return (
                     this.renderNavigationAppsView()
                 );
         }
@@ -307,7 +308,8 @@ NavigationApps.defaultProps = {
         address: '',
         lat: '',
         lon: '',
-        icon: null
+        icon: null,
+        title: null
     },
     googleMaps: {
         action: googleMapsActions.navigateByAddress,
@@ -315,7 +317,8 @@ NavigationApps.defaultProps = {
         lat: '',
         lon: '',
         travelMode: 'driving',
-        icon: null
+        icon: null,
+        title: null
     },
     maps: {
         action: mapsActions.navigateByAddress,
@@ -323,7 +326,8 @@ NavigationApps.defaultProps = {
         lat: '',
         lon: '',
         travelMode: 'd',
-        icon: null
+        icon: null,
+        title: null
     },
     iconSize: 100,
     viewMode: 'view',
@@ -338,21 +342,21 @@ NavigationApps.defaultProps = {
     modalBtnCloseTextStyle: {},
     modalBtnOpenTextStyle: {},
     modalBtnOpenStyle: {},
-    modalBtnDisable: false,
-    actionSheetBtnOpenTitle:'open action sheet',
-    actionSheetBtnCloseTitle:'close action sheet',
-    actionSheetTitle:'choose navigation app',
+    actionSheetBtnOpenTitle: 'open action sheet',
+    actionSheetBtnCloseTitle: 'close action sheet',
+    actionSheetTitle: 'choose navigation app',
     actionSheetBtnOpenStyle: {},
     actionSheetBtnOpenTextStyle: {},
-    actionSheetBtnOpenDisable:false,
     address: '',
-
+    disable:false,
 
 };
 NavigationApps.propTypes = {
+
+    disable:PropTypes.bool,
     appsOptions: PropTypes.object,
     iconSize: PropTypes.number,
-    viewMode: PropTypes.oneOf(['view', 'modal','sheet']),
+    viewMode: PropTypes.oneOf(['view', 'modal', 'sheet']),
     row: PropTypes.bool,
     address: PropTypes.string,
     containerStyle: ViewPropTypes.style,
@@ -365,14 +369,11 @@ NavigationApps.propTypes = {
     modalBtnOpenStyle: ViewPropTypes.style,
     modalProps: PropTypes.object,
     modalContainerStyle: PropTypes.object,
-    actionSheetBtnOpenTitle:PropTypes.string,
-    actionSheetBtnCloseTitle:PropTypes.string,
-    actionSheetTitle:PropTypes.string,
+    actionSheetBtnOpenTitle: PropTypes.string,
+    actionSheetBtnCloseTitle: PropTypes.string,
+    actionSheetTitle: PropTypes.string,
     actionSheetBtnOpenStyle: ViewPropTypes.style,
     actionSheetBtnOpenTextStyle: Text.propTypes.style,
-    actionSheetBtnOpenDisable:PropTypes.bool,
-    modalBtnOpenDisable:PropTypes.bool
-
 
 };
 
