@@ -32,7 +32,7 @@ export const wazeDefaultProps = {
 
 
     action: wazeActions.navigateByAddress,
-    address: '',
+    address: null,
     lat: '',
     lon: '',
     icon: null,
@@ -46,7 +46,7 @@ export const googleMapsDefaultProps = {
 
 
     action: googleMapsActions.navigateByAddress,
-    address: '',
+    address: null,
     lat: '',
     lon: '',
     travelMode: 'driving',
@@ -60,7 +60,7 @@ export const mapsDefaultProps = {
 
 
     action: mapsActions.navigateByAddress,
-    address: '',
+    address: null,
     lat: '',
     lon: '',
     travelMode: 'd',
