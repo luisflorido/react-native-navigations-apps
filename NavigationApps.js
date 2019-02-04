@@ -157,10 +157,10 @@ class NavigationApps extends Component {
         };
         const renderModalBtnOpen = () => {
 
-            const {modalBtnOpenStyle, modalBtnOpenTitle, modalBtnOpenTextStyle, disable} = this.props;
+            const {modalBtnOpenStyle, modalBtnOpenTitle, modalBtnOpenTextStyle, disabled} = this.props;
 
             return (
-                <TouchableOpacity style={modalBtnOpenStyle} onPress={() => disable ? null : setModalVisible(true)}>
+                <TouchableOpacity disabled={disabled} style={modalBtnOpenStyle} onPress={() => disabled ? null : setModalVisible(true)}>
                     <Text style={modalBtnOpenTextStyle}>{modalBtnOpenTitle}</Text>
                 </TouchableOpacity>
             )
@@ -203,9 +203,9 @@ class NavigationApps extends Component {
 
 
         const renderActionSheetOpenBtn = () => {
-            const {actionSheetBtnOpenStyle, actionSheetBtnOpenTitle, actionSheetBtnOpenTextStyle, disable} = this.props;
+            const {actionSheetBtnOpenStyle, actionSheetBtnOpenTitle, actionSheetBtnOpenTextStyle, disabled} = this.props;
             return (
-                <TouchableOpacity style={actionSheetBtnOpenStyle} onPress={() => disable ? null : this.actionSheetRef.show()}>
+                <TouchableOpacity disabled={disabled} style={actionSheetBtnOpenStyle} onPress={() => disabled ? null : this.actionSheetRef.show()}>
                     <Text style={actionSheetBtnOpenTextStyle}>{actionSheetBtnOpenTitle}</Text>
                 </TouchableOpacity>
             )
@@ -348,12 +348,12 @@ NavigationApps.defaultProps = {
     actionSheetBtnOpenStyle: {},
     actionSheetBtnOpenTextStyle: {},
     address: '',
-    disable:false,
+    disabled:false,
 
 };
 NavigationApps.propTypes = {
 
-    disable:PropTypes.bool,
+    disabled:PropTypes.bool,
     appsOptions: PropTypes.object,
     iconSize: PropTypes.number,
     viewMode: PropTypes.oneOf(['view', 'modal', 'sheet']),
