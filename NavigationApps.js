@@ -111,6 +111,8 @@ class NavigationApps extends Component {
 
     handleNavApp = (navApp) => {
 
+        debugger
+
         const navAppOptions = this.props[navApp];
         const navAppItem = this.state.navApps[navApp];
         const {storeUri, appDeepLinkUri} = navAppItem;
@@ -238,7 +240,16 @@ class NavigationApps extends Component {
                     onPress={(index) => {
 
                         if (index !== actionSheetOptions().length - 1) {
-                            this.handleNavApp(actionSheetOptions()[index])
+
+                            const navItemTitle = actionSheetOptions()[index]
+                            const navItem = Object.keys(this.state.navApps).filter((navApp)=>{
+
+
+                                if(this.state.navApps[navApp].title === navItemTitle) return navApp
+
+                            })[0]
+
+                            this.handleNavApp(navItem)
                         }
 
 

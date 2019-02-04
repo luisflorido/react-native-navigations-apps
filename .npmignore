@@ -1,4 +1,4 @@
-Example
+reactNativeNavigationAppsExample
 # OSX
 #
 .DS_Store
@@ -55,3 +55,5 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+
+
