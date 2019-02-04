@@ -11,7 +11,7 @@ import {
     ViewPropTypes,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {googleMapsActions, mapsActions, wazeActions} from "./NavigationAppsTools";
+import {googleMapsActions, mapsActions, wazeActions, wazeDefaultProps,googleMapsDefaultProps,mapsDefaultProps} from "./NavigationAppsTools";
 import ActionSheet from 'react-native-actionsheet';
 
 class NavigationApps extends Component {
@@ -44,7 +44,9 @@ class NavigationApps extends Component {
                     travelModes: {},
                     navigateByAddress: ({address}) => encodeURI(this.state.navApps.waze.appDeepLinkUriToUse + `q=${address}&navigate=yes`),
                     navigateByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.waze.appDeepLinkUriToUse + `ll=${lat},${lon}&navigate=yes`),
-                    searchLocationByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.waze.appDeepLinkUriToUse + `ll=${lat},${lon}`)
+                    searchLocationByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.waze.appDeepLinkUriToUse + `ll=${lat},${lon}`),
+                    ...wazeDefaultProps,
+                    ...props.waze
                 },
                 'googleMaps': {
 
@@ -80,6 +82,8 @@ class NavigationApps extends Component {
                         }
                     }),
                     icon: props.googleMaps.icon ? props.googleMaps.icon : require('./assets/googleMapsIcon.png'),
+                    ...googleMapsDefaultProps,
+                    ...props.googleMaps
 
                 },
                 ...Platform.select({
@@ -96,31 +100,34 @@ class NavigationApps extends Component {
                             },
                             navigateByAddress: ({address, travelMode}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `daddr=${address}&dirflg=${travelMode}`),
                             navigateByLatAndLon: ({address, travelMode, lat, lon}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `daddr=${address}&dirflg=${travelMode}&ll=${llatan},${lon}`),
-                            searchLocationByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `ll=${lat},${lon}`)
-
+                            searchLocationByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `ll=${lat},${lon}`),
+                            ...mapsDefaultProps,
+                            ...props.maps
                         },
+
 
                     }
                 })
 
             },
+
             modalVisible: false,
+
         };
+
         this.actionSheetRef=null;
     }
 
     handleNavApp = (navApp) => {
 
-        debugger
 
-        const navAppOptions = this.props[navApp];
         const navAppItem = this.state.navApps[navApp];
         const {storeUri, appDeepLinkUri} = navAppItem;
-        const address = navAppOptions.address ? navAppOptions.address : this.props.address;
-        const lat = navAppOptions.lat ? navAppOptions.lat : '';
-        const lon = navAppOptions.lon ? navAppOptions.lon : '';
-        const travelMode = navAppOptions.travelMode ? navAppOptions.travelMode : '';
-        const navAppUri = navAppItem[navAppOptions.action]({address, lat, lon, travelMode});
+        const address = navAppItem.address ? navAppItem.address : this.props.address;
+        const lat = navAppItem.lat;
+        const lon = navAppItem.lon;
+        const travelMode = navAppItem.travelMode;
+        const navAppUri = navAppItem[navAppItem.action]({address, lat, lon, travelMode});
 
 
         return Linking.canOpenURL(appDeepLinkUri).then(supported => {
@@ -314,7 +321,6 @@ const styles = StyleSheet.create({
 NavigationApps.defaultProps = {
 
     waze: {
-
         action: wazeActions.navigateByAddress,
         address: '',
         lat: '',
