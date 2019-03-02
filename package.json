@@ -3,9 +3,6 @@
   "version": "1.0.22",
   "description": "Open & Navigate With External Navigation Apps (Waze,GoogleMaps,iOS Maps) from react native",
   "main": "index.js",
-  "scripts": {
-    "npm-version": "npm version patch"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/electrozed/react-native-navigations-apps.git"
