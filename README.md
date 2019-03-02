@@ -21,7 +21,7 @@ yarn add react-native-navigation-apps
 
 ## Usage
 ```javascript
-import {NavigationApps,googleMapsActions,wazeActions,googleMapsTravelModes} from "react-native-navigation-apps";
+import {NavigationApps,actions,googleMapsTravelModes} from "react-native-navigation-apps";
 
       <NavigationApps
                     modalProps={{animationType:'slide',transparent:true}}
@@ -37,9 +37,9 @@ import {NavigationApps,googleMapsActions,wazeActions,googleMapsTravelModes} from
                     row
                     viewMode='modal'
                     address='some default address to navigate'
-                    waze={{address:'',lat:'',lon:'',action: wazeActions.navigateByAddress}}
-                    googleMaps={{search,lat:'',lon:'',action: googleMapsActions.navigateByAddress,travelMode:googleMapsTravelModes.driving}}
-                    maps={{search,lat:'',lon:'',action: mapsActions.navigateByAddress,travelMode:mapsTravelModes.driving}}
+                    waze={{address:'',lat:'',lon:'',action: actions.navigateByAddress}}
+                    googleMaps={{search,lat:'',lon:'',action: actions.navigateByAddress,travelMode:googleMapsTravelModes.driving}}
+                    maps={{search,lat:'',lon:'',action: actions.navigateByAddress,travelMode:mapsTravelModes.driving}}
                 />
 ```
 

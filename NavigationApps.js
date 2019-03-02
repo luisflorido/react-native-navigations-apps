@@ -130,9 +130,9 @@ class NavigationApps extends Component {
         try {
             const supported = await Linking.canOpenURL(appDeepLinkUri);
             if (!supported) {
-                return Linking.openURL(storeUri);
+                return await Linking.openURL(storeUri);
             } else {
-                return Linking.openURL(navAppUri);
+                return await Linking.openURL(navAppUri);
             }
 
         } catch (e) {

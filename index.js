@@ -1,2 +1,2 @@
 export * from './NavigationApps'
-export {googleMapsActions,wazeActions,mapsActions,googleMapsTravelModes,mapsTravelModes} from './NavigationAppsTools'
+export {actions,googleMapsTravelModes,mapsTravelModes} from './NavigationAppsTools'
