@@ -24,18 +24,8 @@ yarn add react-native-navigation-apps
 import {NavigationApps,actions,googleMapsTravelModes} from "react-native-navigation-apps";
 
       <NavigationApps
-                    modalProps={{animationType:'slide',transparent:true}}
-                    modalContainerStyle={{height:300 width:300,backgroundColor:'white',justifyContent:'center',alignItems:'center'}}
-                    modalBtnCloseContainerStyle={{}}
-                    modalBtnCloseStyle={{borderWidth:1}}
-                    modalBtnCloseTextStyle={{fontSize:20}}
-                    modalBtnOpenStyle={{borderWidth:1}}
-                    modalBtnOpenTextStyle={{fontSize:50,color:'white'}}
-                    modalBtnOpenText={'some text'}
-                    modalBtnCloseText={'some text'}
                     iconSize={50}
                     row
-                    viewMode='modal'
                     address='some default address to navigate'
                     waze={{address:'',lat:'',lon:'',action: actions.navigateByAddress}}
                     googleMaps={{search,lat:'',lon:'',action: actions.navigateByAddress,travelMode:googleMapsTravelModes.driving}}
