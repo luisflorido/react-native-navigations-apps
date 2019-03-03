@@ -314,9 +314,6 @@ const styles = StyleSheet.create({
 
 NavigationApps.defaultProps = {
 
-    waze,
-    googleMaps,
-    maps,
     iconSize: 100,
     viewMode: 'view',
     row: false,
@@ -342,7 +339,6 @@ NavigationApps.defaultProps = {
 NavigationApps.propTypes = {
 
     disable: PropTypes.bool,
-    appsOptions: PropTypes.object,
     iconSize: PropTypes.number,
     viewMode: PropTypes.oneOf(['view', 'modal', 'sheet']),
     row: PropTypes.bool,
@@ -362,6 +358,9 @@ NavigationApps.propTypes = {
     actionSheetTitle: PropTypes.string,
     actionSheetBtnOpenStyle: ViewPropTypes.style,
     actionSheetBtnOpenTextStyle: Text.propTypes.style,
+    waze:PropTypes.object(),
+    googleMaps:PropTypes.object(),
+    maps:PropTypes.object()
 
 };
 

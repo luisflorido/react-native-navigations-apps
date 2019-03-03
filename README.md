@@ -26,10 +26,10 @@ import {NavigationApps,actions,googleMapsTravelModes} from "react-native-navigat
       <NavigationApps
                     iconSize={50}
                     row
-                    address='some default address to navigate'
-                    waze={{address:'',lat:'',lon:'',action: actions.navigateByAddress}}
-                    googleMaps={{search,lat:'',lon:'',action: actions.navigateByAddress,travelMode:googleMapsTravelModes.driving}}
-                    maps={{search,lat:'',lon:'',action: actions.navigateByAddress,travelMode:mapsTravelModes.driving}}
+                    address='some default address to navigate' // address to navigate by for all apps 
+                    waze={{address:'',lat:'',lon:'',action: actions.navigateByAddress}} // specific settings for waze
+                    googleMaps={{search,lat:'',lon:'',action: actions.navigateByAddress,travelMode:googleMapsTravelModes.driving}} // specific settings for google maps
+                    maps={{search,lat:'',lon:'',action: actions.navigateByAddress,travelMode:mapsTravelModes.driving}} // specific settings for maps
                 />
 ```
 
