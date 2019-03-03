@@ -358,9 +358,9 @@ NavigationApps.propTypes = {
     actionSheetTitle: PropTypes.string,
     actionSheetBtnOpenStyle: ViewPropTypes.style,
     actionSheetBtnOpenTextStyle: Text.propTypes.style,
-    waze:PropTypes.object(),
-    googleMaps:PropTypes.object(),
-    maps:PropTypes.object()
+    waze:PropTypes.object,
+    googleMaps:PropTypes.object,
+    maps:PropTypes.object
 
 };
 
