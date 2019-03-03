@@ -68,7 +68,7 @@ class NavigationApps extends Component {
                     }),
                     ...waze,
                     ...props.waze,
-                    navigateByAddress: ({address}) => encodeURI(this.state.navApps.waze.appDeepLinkUriToUse + `q=${address}&navigate=yes`),
+                    navigateByAddress: ({addressToNavigate}) => encodeURI(this.state.navApps.waze.appDeepLinkUriToUse + `q=${addressToNavigate}&navigate=yes`),
                     navigateByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.waze.appDeepLinkUriToUse + `ll=${lat},${lon}&navigate=yes`),
                     searchLocationByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.waze.appDeepLinkUriToUse + `ll=${lat},${lon}`)
                 },
@@ -79,8 +79,8 @@ class NavigationApps extends Component {
                             appDeepLinkUri: 'comgooglemaps://',
                             appDeepLinkUriToUse: 'comgooglemaps://?',
                             storeUri: 'itms-apps://itunes.apple.com/us/app/id585027354?mt=8',
-                            navigateByAddress: ({address, travelMode}) => this.state.navApps.googleMaps.appDeepLinkUriToUse + `daddr=${address}&directionsmode=${travelMode}`,
-                            navigateByLatAndLon: ({address, travelMode, lat, lon}) => encodeURI(this.state.navApps.googleMaps.appDeepLinkUriToUse + `q=${address}&center=${lat},${lon}`),
+                            navigateByAddress: ({addressToNavigate, travelMode}) => this.state.navApps.googleMaps.appDeepLinkUriToUse + `daddr=${addressToNavigate}&directionsmode=${travelMode}`,
+                            navigateByLatAndLon: ({addressToNavigate, travelMode, lat, lon}) => encodeURI(this.state.navApps.googleMaps.appDeepLinkUriToUse + `q=${addressToNavigate}&center=${lat},${lon}`),
                             searchLocationByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.googleMaps.appDeepLinkUriToUse + `search/?api=1&query=${lat},${lon}`)
                         },
                         android: {
@@ -102,8 +102,8 @@ class NavigationApps extends Component {
                             ...props.maps,
                             appDeepLinkUri: 'maps://app',
                             appDeepLinkUriToUse: 'maps://app?',
-                            navigateByAddress: ({address, travelMode}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `daddr=${address}&dirflg=${travelMode}`),
-                            navigateByLatAndLon: ({address, travelMode, lat, lon}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `daddr=${address}&dirflg=${travelMode}&ll=${llatan},${lon}`),
+                            navigateByAddress: ({addressToNavigate, travelMode}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `daddr=${addressToNavigate}&dirflg=${travelMode}`),
+                            navigateByLatAndLon: ({addressToNavigate, travelMode, lat, lon}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `daddr=${addressToNavigate}&dirflg=${travelMode}&ll=${llatan},${lon}`),
                             searchLocationByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `ll=${lat},${lon}`)
 
                         },
@@ -118,24 +118,29 @@ class NavigationApps extends Component {
 
     handleNavApp = async (navApp) => {
 
-        const navAppOptions = this.props[navApp];
-        const navAppItem = this.state.navApps[navApp];
-        const {storeUri, appDeepLinkUri} = navAppItem;
-        const address = navAppOptions.address ? navAppOptions.address : this.props.address;
-        const lat = navAppOptions.lat ? navAppOptions.lat : '';
-        const lon = navAppOptions.lon ? navAppOptions.lon : '';
-        const travelMode = navAppOptions.travelMode ? navAppOptions.travelMode : '';
-        const navAppUri = navAppItem[navAppOptions.action]({address, lat, lon, travelMode});
+
+        const {address} = this.props;
+        const {navApps} = this.state;
+        const navAppItem = navApps[navApp];
+        const {storeUri, appDeepLinkUri} = navApp;
+
+        const addressToNavigate = navAppItem.address ? navAppItem.address : address;
+
+        const lat = navAppItem.lat ? navAppItem.lat : '';
+        const lon = navAppItem.lon ? navAppItem.lon : '';
+        const travelMode = navAppItem.travelMode ? navAppItem.travelMode : '';
+        const navAppUri = navAppItem[navAppItem.action]({addressToNavigate, lat, lon, travelMode});
 
         try {
-            const supported = await Linking.canOpenURL(appDeepLinkUri);
+            const supported = await Linking.canOpenURL(navAppItem.appDeepLinkUri);
             if (!supported) {
                 return await Linking.openURL(storeUri);
             } else {
                 return await Linking.openURL(navAppUri);
             }
 
-        } catch (e) {
+        }
+        catch (e) {
             alert(e)
         }
 
