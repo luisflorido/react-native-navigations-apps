@@ -103,7 +103,7 @@ class NavigationApps extends Component {
                             appDeepLinkUri: 'maps://app',
                             appDeepLinkUriToUse: 'maps://app?',
                             navigateByAddress: ({addressToNavigate, travelMode}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `daddr=${addressToNavigate}&dirflg=${travelMode}`),
-                            navigateByLatAndLon: ({addressToNavigate, travelMode, lat, lon}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `daddr=${addressToNavigate}&dirflg=${travelMode}&ll=${llatan},${lon}`),
+                            navigateByLatAndLon: ({addressToNavigate, travelMode, lat, lon, name}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `daddr=${addressToNavigate}&dirflg=${travelMode}&ll=${lat},${lon}&q=${name}`),
                             searchLocationByLatAndLon: ({lat, lon}) => encodeURI(this.state.navApps.maps.appDeepLinkUriToUse + `ll=${lat},${lon}`)
 
                         },
@@ -117,22 +117,22 @@ class NavigationApps extends Component {
     }
 
     handleNavApp = async (navApp) => {
-
-
         const {address} = this.props;
         const {navApps} = this.state;
         const navAppItem = navApps[navApp];
-        const {storeUri, appDeepLinkUri} = navApp;
+        const {storeUri} = navAppItem;
 
         const addressToNavigate = navAppItem.address ? navAppItem.address : address;
 
         const lat = navAppItem.lat ? navAppItem.lat : '';
         const lon = navAppItem.lon ? navAppItem.lon : '';
+        const name = navAppItem.name ? navAppItem.name : '';
         const travelMode = navAppItem.travelMode ? navAppItem.travelMode : '';
-        const navAppUri = navAppItem[navAppItem.action]({addressToNavigate, lat, lon, travelMode});
+        const navAppUri = navAppItem[navAppItem.action]({addressToNavigate, lat, lon, travelMode, name});
 
         try {
             const supported = await Linking.canOpenURL(navAppItem.appDeepLinkUri);
+            
             if (!supported) {
                 return await Linking.openURL(storeUri);
             } else {
