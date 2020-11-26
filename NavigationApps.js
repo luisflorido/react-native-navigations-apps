@@ -131,17 +131,9 @@ class NavigationApps extends Component {
         const navAppUri = navAppItem[navAppItem.action]({addressToNavigate, lat, lon, travelMode, name});
 
         try {
-            const supported = await Linking.canOpenURL(navAppItem.appDeepLinkUri);
-            
-            if (!supported) {
-                return await Linking.openURL(storeUri);
-            } else {
-                return await Linking.openURL(navAppUri);
-            }
-
-        }
-        catch (e) {
-            alert(e)
+            return await Linking.openURL(navAppUri);
+        } catch (e) {
+            return await Linking.openURL(storeUri);
         }
 
     };
